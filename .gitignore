@@ -1,0 +1,8 @@
+/ignored/
+/src/ignored/
+/obj/*.o
+/lib/*.a
+/.vscode/
+/dat/results/
+/tests/bin/*.out
+.clang-format

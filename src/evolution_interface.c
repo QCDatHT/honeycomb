@@ -11,8 +11,8 @@
 void get_3D_in_grid_space(double x1, double x2, double x3, int32_t N, int32_t M, double c_fact, double *phi, double *rho, double grid_exp, nonlinear_radial_grid_type_e G_type, angular_grid_type_e AG_type);
 
 static input_parameters_t _default_in_par = (input_parameters_t){
-    .N = 10,
-    .M = 15,
+    .N = 20,
+    .M = 25,
     .mu0_2 = 1,
     .muF_2 = 10,
     .nstep = 100,

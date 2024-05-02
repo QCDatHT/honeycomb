@@ -1,5 +1,7 @@
 # tw3evolution
 
+### DOI
+[![DOI](https://zenodo.org/badge/792447252.svg)](https://zenodo.org/doi/10.5281/zenodo.11102676)
 
 ### Installation and throubleshooting 
 0. The windows platform are not supported in the current version.

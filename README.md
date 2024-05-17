@@ -1,4 +1,4 @@
-# tw3evolution
+# Honeycomb <img src="Honeycomb_Logo-1.png" alt="drawing" width="30"/>
 
 ### DOI
 [![DOI](https://zenodo.org/badge/792447252.svg)](https://zenodo.org/doi/10.5281/zenodo.11102676)

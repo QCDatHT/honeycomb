@@ -44,7 +44,7 @@ void supply_default_parameters(input_parameters_t *in_par)
    if (tmp_basefolder != NULL) in_par->basefolder = tmp_basefolder;
    else in_par->basefolder = (char *)calloc(BASEFOLDER_MAX_L + 1, sizeof(char));
 
-   strcpy(in_par->basefolder, "../../");
+   strcpy(in_par->basefolder, "./");
 
    if (tmp_ker_subfolder != NULL) in_par->ker_subfolder = tmp_ker_subfolder;
    else in_par->ker_subfolder = (char *)calloc(BASEFOLDER_MAX_L + 1, sizeof(char));

@@ -19,7 +19,7 @@ typedef struct {
 double as(double t, void *p)
 {
    (void)p;
-   return 1.0 / (4 * M_PI * 11.0 * (t + 3.));
+   return 1.0 / (11.0 * (t + 3.));
 }
 
 double as_LO_GRV98(double t, void *p)

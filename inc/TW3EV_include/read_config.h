@@ -22,13 +22,13 @@ typedef struct {
    uint64_t count;
 } tw3ev_string_container_t;
 
-tw3ev_string_stream_t *tw3ev_write_to_sstream(tw3ev_string_stream_t *restrict str, const char *restrict stuff, size_t n);
-int tw3ev_write_sstream_to_file(tw3ev_string_stream_t *restrict str, const char *restrict file_path);
-size_t tw3ev_write_sstream_to_file_handler(tw3ev_string_stream_t *restrict str, FILE *restrict fp);
-bool tw3ev_compare_sstream_to_char(tw3ev_string_stream_t *restrict str, const char *restrict buff);
-bool tw3ev_compare_sstream(tw3ev_string_stream_t *restrict str1, tw3ev_string_stream_t *restrict str2);
-tw3ev_string_stream_t *tw3ev_read_file_to_sstream(const char *restrict file_path);
-tw3ev_string_container_t *tw3ev_tokenize_sstream(tw3ev_string_stream_t *restrict str, const char delim[]);
+tw3ev_string_stream_t *tw3ev_write_to_sstream(tw3ev_string_stream_t *  str, const char *  stuff, size_t n);
+int tw3ev_write_sstream_to_file(tw3ev_string_stream_t *  str, const char *  file_path);
+size_t tw3ev_write_sstream_to_file_handler(tw3ev_string_stream_t *  str, FILE *  fp);
+bool tw3ev_compare_sstream_to_char(tw3ev_string_stream_t *  str, const char *  buff);
+bool tw3ev_compare_sstream(tw3ev_string_stream_t *  str1, tw3ev_string_stream_t *  str2);
+tw3ev_string_stream_t *tw3ev_read_file_to_sstream(const char *  file_path);
+tw3ev_string_container_t *tw3ev_tokenize_sstream(tw3ev_string_stream_t *  str, const char delim[]);
 
 void tw3ev_free_sstream(tw3ev_string_stream_t **str);
 void tw3ev_clear_sstream(tw3ev_string_stream_t *str);

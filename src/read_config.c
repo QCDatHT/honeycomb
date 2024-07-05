@@ -6,7 +6,7 @@
 
 #define CHECK_NOT_NUM(tk, i) ((tk)[i] < '0' || (tk)[i] > '9')
 
-tw3ev_string_stream_t *tw3ev_write_to_sstream(tw3ev_string_stream_t *restrict str, const char *restrict stuff, size_t n)
+tw3ev_string_stream_t *tw3ev_write_to_sstream(tw3ev_string_stream_t *  str, const char *  stuff, size_t n)
 {
    if (NULL == str) {
       DA_INIT(str, tw3ev_string_stream_t, char);
@@ -19,7 +19,7 @@ tw3ev_string_stream_t *tw3ev_write_to_sstream(tw3ev_string_stream_t *restrict st
    return str;
 }
 
-size_t tw3ev_write_sstream_to_file_handler(tw3ev_string_stream_t *restrict str, FILE *restrict fp)
+size_t tw3ev_write_sstream_to_file_handler(tw3ev_string_stream_t *  str, FILE *  fp)
 {
 
    if (NULL == str) tw3ev_log(TW3EV_ERROR, "Trying to print NULL string stream to file.");
@@ -28,7 +28,7 @@ size_t tw3ev_write_sstream_to_file_handler(tw3ev_string_stream_t *restrict str, 
    return fwrite(str->content, 1, str->count, fp);
 }
 
-int tw3ev_write_sstream_to_file(tw3ev_string_stream_t *restrict str, const char *restrict file_path)
+int tw3ev_write_sstream_to_file(tw3ev_string_stream_t *  str, const char *  file_path)
 {
    FILE *fp = fopen(file_path, "rb");
    if (!fp) tw3ev_log(TW3EV_ERROR, "Impossible to open the file <%s>", file_path);
@@ -42,7 +42,7 @@ int tw3ev_write_sstream_to_file(tw3ev_string_stream_t *restrict str, const char 
    return 0;
 }
 
-tw3ev_string_stream_t *tw3ev_read_file_to_sstream(const char *restrict file_path)
+tw3ev_string_stream_t *tw3ev_read_file_to_sstream(const char *  file_path)
 {
    FILE *fp = fopen(file_path, "rb");
    if (!fp) tw3ev_log(TW3EV_ERROR, "Impossible to open the file <%s>", file_path);
@@ -64,7 +64,7 @@ tw3ev_string_stream_t *tw3ev_read_file_to_sstream(const char *restrict file_path
    return sstream;
 }
 
-bool tw3ev_compare_sstream_to_char(tw3ev_string_stream_t *restrict str, const char *restrict buff)
+bool tw3ev_compare_sstream_to_char(tw3ev_string_stream_t *  str, const char *  buff)
 {
    bool are_equal = true;
    size_t i = 0;
@@ -78,7 +78,7 @@ bool tw3ev_compare_sstream_to_char(tw3ev_string_stream_t *restrict str, const ch
    return are_equal;
 }
 
-bool tw3ev_compare_sstream(tw3ev_string_stream_t *restrict str1, tw3ev_string_stream_t *restrict str2)
+bool tw3ev_compare_sstream(tw3ev_string_stream_t *  str1, tw3ev_string_stream_t *  str2)
 {
    bool are_equal = true;
    if (str1->count != str2->count) return false;
@@ -90,7 +90,7 @@ bool tw3ev_compare_sstream(tw3ev_string_stream_t *restrict str1, tw3ev_string_st
    return are_equal;
 }
 
-tw3ev_string_container_t *tw3ev_tokenize_sstream(tw3ev_string_stream_t *restrict str, const char delim[])
+tw3ev_string_container_t *tw3ev_tokenize_sstream(tw3ev_string_stream_t *  str, const char delim[])
 {
    if (!str) tw3ev_log(TW3EV_ERROR, "Trying to tokenize null string stream");
    if (!str->content || 0 == str->size) tw3ev_log(TW3EV_ERROR, "Trying to tokenize null string stream content");

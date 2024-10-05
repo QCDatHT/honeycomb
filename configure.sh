@@ -6,6 +6,7 @@
 
 PREFERRED_COMP=${1:-""}
 LIBOMP_PATH=${LIBOMP_PATH:=""}
+LARGE_NC=${LARGE_NC:=""}
 
 set -eu
 
@@ -116,19 +117,22 @@ if [ ! -z "${LIBOMP_PATH}" ]; then
    export PATH="${LIBOMP_PATH}:${PATH}"
    tmp_FLAG="-L${LIBOMP_PATH}"
 fi
-$PREFERRED_COMP temp.c ${tmp_FLAG} -fopenmp -o compilation_check_tw3ev.out > /dev/null 2>&1
+$PREFERRED_COMP temp.c ${tmp_FLAG} -fopenmp -o compilation_check_tw3ev.out >/dev/null 2>&1
 
 if [ $? -ne 0 ]; then
    echo -e "${RED}...with the selected compiler and library path the compilation fails, disabling OMP support${NC}"
 else
-   echo -e "${GREEN}...test compilation successful, enabling OMP support${NC}" 
+   echo -e "${GREEN}...test compilation successful, enabling OMP support${NC}"
    CFLAGS_COMMON="${CFLAGS_COMMON} -fopenmp -DUSE_OMP"
 fi
 set -e
 
+if [ ! -z "${LARGE_NC}" ]; then
+   CFLAGS_COMMON="${CFLAGS_COMMON} -D_LARGE_NC_KERNELS_"
+fi
+
 rm -rf "temp.c"
 rm -rf "compilation_check_tw3ev.out"
-
 
 echo -e "CC=${PREFERRED_COMP}" >>Makefile
 echo -e "${CFLAGS_COMMON}" >>Makefile

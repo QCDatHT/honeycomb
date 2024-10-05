@@ -6,3 +6,5 @@
 /dat/results/
 /tests/bin/*.out
 .clang-format
+compile.sh
+Makefile

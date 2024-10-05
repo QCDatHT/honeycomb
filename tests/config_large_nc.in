@@ -14,7 +14,7 @@ grid_exponent	3.0
 chiral_even_evolution  true
 chiral_odd_evolution	false
 basefolder	../..
-kernel_subfolder shipped_60x15
-result_subfolder full_kernels_1_to_100
+kernel_subfolder large_nc_60x15
+result_subfolder large_nc_all_flavors_1_to_100
 integration_rule GK21
 model configC

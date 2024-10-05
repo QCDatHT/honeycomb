@@ -18,24 +18,24 @@ static volatile int32_t done_tasks = 0;
 static pthread_mutex_t lock_task = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t notify_task = PTHREAD_COND_INITIALIZER;
 
-#define SIGNAL_DONE_TASK()                                                                                                                                                                                                                               \
-   do {                                                                                                                                                                                                                                                  \
-      pthread_mutex_lock(&lock_task);                                                                                                                                                                                                                    \
-      done_tasks++;                                                                                                                                                                                                                                      \
-      pthread_cond_signal(&notify_task);                                                                                                                                                                                                                 \
-      pthread_mutex_unlock(&lock_task);                                                                                                                                                                                                                  \
+#define SIGNAL_DONE_TASK()                                                                                                                           \
+   do {                                                                                                                                              \
+      pthread_mutex_lock(&lock_task);                                                                                                                \
+      done_tasks++;                                                                                                                                  \
+      pthread_cond_signal(&notify_task);                                                                                                             \
+      pthread_mutex_unlock(&lock_task);                                                                                                              \
    } while (0);
 
-#define WAIT_ON_DONE_TASK(M)                                                                                                                                                                                                                             \
-   {                                                                                                                                                                                                                                                     \
-      do {                                                                                                                                                                                                                                               \
-         pthread_mutex_lock(&lock_task);                                                                                                                                                                                                                 \
-         while (done_tasks < (M))                                                                                                                                                                                                                        \
-            pthread_cond_wait(&notify_task, &lock_task);                                                                                                                                                                                                 \
-         pthread_mutex_unlock(&lock_task);                                                                                                                                                                                                               \
-         break;                                                                                                                                                                                                                                          \
-      } while (1);                                                                                                                                                                                                                                       \
-      done_tasks = 0;                                                                                                                                                                                                                                    \
+#define WAIT_ON_DONE_TASK(M)                                                                                                                         \
+   {                                                                                                                                                 \
+      do {                                                                                                                                           \
+         pthread_mutex_lock(&lock_task);                                                                                                             \
+         while (done_tasks < (M))                                                                                                                    \
+            pthread_cond_wait(&notify_task, &lock_task);                                                                                             \
+         pthread_mutex_unlock(&lock_task);                                                                                                           \
+         break;                                                                                                                                      \
+      } while (1);                                                                                                                                   \
+      done_tasks = 0;                                                                                                                                \
    }
 
 static nonlinear_radial_grid_type_e G_type = LOG_GRID;
@@ -72,7 +72,8 @@ void kernels_set_grid_type(interpolant_type_e F_t, nonlinear_radial_grid_type_e 
 
 void get_grid_in_3D_space_double(double i, double j, int32_t N, int32_t M, double c_fact, double *x1, double *x2, double *x3);
 
-void kernels_setup_for_computation(int32_t N, int32_t M, double c_fact, int32_t n_threads, interpolant_type_e F_t, nonlinear_radial_grid_type_e G_t, angular_grid_type_e AG_t, double pge, const char basefolder[])
+void kernels_setup_for_computation(int32_t N, int32_t M, double c_fact, int32_t n_threads, interpolant_type_e F_t, nonlinear_radial_grid_type_e G_t,
+                                   angular_grid_type_e AG_t, double pge, const char basefolder[])
 {
    kernels_set_grid_type(F_t, G_t, AG_t, pge);
 
@@ -176,14 +177,14 @@ void kernels_setup_for_computation(int32_t N, int32_t M, double c_fact, int32_t 
    if (NULL != fp) fclose(fp);
 }
 
-#define _UPDATE_XMAX_XMIN_()                                                                                                                                                                                                                             \
-   do {                                                                                                                                                                                                                                                  \
-      sp->x1min = min2(x1, sp->x1min);                                                                                                                                                                                                                   \
-      sp->x2min = min2(x2, sp->x2min);                                                                                                                                                                                                                   \
-      sp->x3min = min2(x3, sp->x3min);                                                                                                                                                                                                                   \
-      sp->x1max = max2(x1, sp->x1max);                                                                                                                                                                                                                   \
-      sp->x2max = max2(x2, sp->x2max);                                                                                                                                                                                                                   \
-      sp->x3max = max2(x3, sp->x3max);                                                                                                                                                                                                                   \
+#define _UPDATE_XMAX_XMIN_()                                                                                                                         \
+   do {                                                                                                                                              \
+      sp->x1min = min2(x1, sp->x1min);                                                                                                               \
+      sp->x2min = min2(x2, sp->x2min);                                                                                                               \
+      sp->x3min = min2(x3, sp->x3min);                                                                                                               \
+      sp->x1max = max2(x1, sp->x1max);                                                                                                               \
+      sp->x2max = max2(x2, sp->x2max);                                                                                                               \
+      sp->x3max = max2(x3, sp->x3max);                                                                                                               \
    } while (0);
 
 void get_xmin_xmax2(int32_t i, int32_t j, stored_point_t *sp, int32_t N, int32_t M, double c_fact)
@@ -230,7 +231,11 @@ double H_NS(int32_t i, int32_t j, int32_t ip, int32_t jp, integration_wrapper_t 
    (void)nf;
    double an_dim = (i == ip && j == jp) ? (-3 * CF) : 0.0;
    double Ncpart = Hhat12(i, j, ip, jp, IW) + Hhat23(i, j, ip, jp, IW) - 2.0 * Hplus12(i, j, ip, jp, IW);
+#ifdef _LARGE_NC_KERNELS_
+   double Ncm1part = 0;
+#else
    double Ncm1part = Hhat13(i, j, ip, jp, IW) - Hplus13(i, j, ip, jp, IW) - He23P23(i, j, ip, jp, IW) + 2 * Hminus12(i, j, ip, jp, IW);
+#endif
    return Nc * Ncpart - Ncm1 * Ncm1part + an_dim;
 }
 
@@ -239,7 +244,11 @@ double H_CO(int32_t i, int32_t j, int32_t ip, int32_t jp, integration_wrapper_t 
    (void)nf;
    double an_dim = (i == ip && j == jp) ? (-3 * CF) : 0.0;
    double Ncpart = Hhat12(i, j, ip, jp, IW) + Hhat23(i, j, ip, jp, IW) - 2.0 * Hplus12(i, j, ip, jp, IW) - 2.0 * Hplus23(i, j, ip, jp, IW);
+#ifdef _LARGE_NC_KERNELS_
+   double Ncm1part = 0;
+#else
    double Ncm1part = Hhat13(i, j, ip, jp, IW) + 2 * Hminus12(i, j, ip, jp, IW) + 2 * Hminus23(i, j, ip, jp, IW);
+#endif
    return Nc * Ncpart - Ncm1 * Ncm1part + an_dim;
 }
 
@@ -259,7 +268,10 @@ double H_qq_p(int32_t i, int32_t j, int32_t ip, int32_t jp, integration_wrapper_
    return 0;
 }
 
-double H_qg_p(int32_t i, int32_t j, int32_t ip, int32_t jp, integration_wrapper_t *IW, int nf) { return nf * (Vp13(i, j, ip, jp, IW) - Vm13(i, j, ip, jp, IW)); }
+double H_qg_p(int32_t i, int32_t j, int32_t ip, int32_t jp, integration_wrapper_t *IW, int nf)
+{
+   return nf * (Vp13(i, j, ip, jp, IW) - Vm13(i, j, ip, jp, IW));
+}
 
 double H_gq_p(int32_t i, int32_t j, int32_t ip, int32_t jp, integration_wrapper_t *IW, int nf)
 {
@@ -272,7 +284,8 @@ double H_gq_p(int32_t i, int32_t j, int32_t ip, int32_t jp, integration_wrapper_
 double H_gg_p(int32_t i, int32_t j, int32_t ip, int32_t jp, integration_wrapper_t *IW, int nf)
 {
    double temp1 = Hhat12GG(i, j, ip, jp, IW) + Hhat23GG(i, j, ip, jp, IW) + Hhat31GG(i, j, ip, jp, IW);
-   double temp2 = -4.0 * (Hplus12GG(i, j, ip, jp, IW) + Hplus13GG(i, j, ip, jp, IW)) - 2.0 * (Htildeplus12GG(i, j, ip, jp, IW) + Htildeplus13GG(i, j, ip, jp, IW));
+   double temp2 = -4.0 * (Hplus12GG(i, j, ip, jp, IW) + Hplus13GG(i, j, ip, jp, IW)) -
+                  2.0 * (Htildeplus12GG(i, j, ip, jp, IW) + Htildeplus13GG(i, j, ip, jp, IW));
    double temp3 = 6.0 * (Hminus12GG(i, j, ip, jp, IW) + Hminus13GG(i, j, ip, jp, IW));
    double b0 = ((i == ip && j == jp) ? 11.0 - 2.0 * nf / 3.0 : 0);
    return CA * (temp1 + temp2 + temp3) - b0;
@@ -291,30 +304,39 @@ double H_qq_m(int32_t i, int32_t j, int32_t ip, int32_t jp, integration_wrapper_
    return 0;
 }
 
-double H_qg_m(int32_t i, int32_t j, int32_t ip, int32_t jp, integration_wrapper_t *IW, int nf) { return nf * (Vp13(i, j, ip, jp, IW) + Vm13(i, j, ip, jp, IW)); }
+double H_qg_m(int32_t i, int32_t j, int32_t ip, int32_t jp, integration_wrapper_t *IW, int nf)
+{
+   return nf * (Vp13(i, j, ip, jp, IW) + Vm13(i, j, ip, jp, IW));
+}
 
 double H_gq_m(int32_t i, int32_t j, int32_t ip, int32_t jp, integration_wrapper_t *IW, int nf)
 {
    (void)nf;
    double temp1 = Wp13(i, j, ip, jp, IW) + Wm13(i, j, ip, jp, IW);
    double temp2 = Wp13P23(i, j, ip, jp, IW) + Wm13P23(i, j, ip, jp, IW);
+#ifdef _LARGE_NC_KERNELS_
+   return -1.0 * Nc * (temp1 + temp2);
+#else
    return -1.0 * ((Nc * Nc - 4.0) / Nc) * (temp1 + temp2);
+#endif
 }
 
 double H_gg_m(int32_t i, int32_t j, int32_t ip, int32_t jp, integration_wrapper_t *IW, int nf)
 {
    double temp1 = Hhat12GG(i, j, ip, jp, IW) + Hhat23GG(i, j, ip, jp, IW) + Hhat31GG(i, j, ip, jp, IW);
-   double temp2 = -4.0 * (Hplus12GG(i, j, ip, jp, IW) + Hplus13GG(i, j, ip, jp, IW)) - 2.0 * (Htildeplus12GG(i, j, ip, jp, IW) + Htildeplus13GG(i, j, ip, jp, IW));
+   double temp2 = -4.0 * (Hplus12GG(i, j, ip, jp, IW) + Hplus13GG(i, j, ip, jp, IW)) -
+                  2.0 * (Htildeplus12GG(i, j, ip, jp, IW) + Htildeplus13GG(i, j, ip, jp, IW));
    double temp3 = -6.0 * (Hminus12GG(i, j, ip, jp, IW) + Hminus13GG(i, j, ip, jp, IW));
    double b0 = ((i == ip && j == jp) ? 11.0 - 2.0 * nf / 3.0 : 0);
    return CA * (temp1 + temp2 + temp3) - b0;
 }
 
-sparse_mat_t *init_kernel_single(double (*Hk)(int32_t, int32_t, int32_t, int32_t, integration_wrapper_t *, int), int32_t N, int32_t M, double c_fact, int32_t n_low, int32_t n_up, int nf)
+sparse_mat_t *init_kernel_single(double (*Hk)(int32_t, int32_t, int32_t, int32_t, integration_wrapper_t *, int), int32_t N, int32_t M, double c_fact,
+                                 int32_t n_low, int32_t n_up, int nf)
 {
 
    integration_wrapper_t *IW = (integration_wrapper_t *)calloc(1, sizeof(integration_wrapper_t));
-   IW->ws_integr = NULL; 
+   IW->ws_integr = NULL;
 
    IW->int_par = (integration_par_t *)calloc(1, sizeof(integration_par_t));
    IW->int_par->N = N;
@@ -323,19 +345,18 @@ sparse_mat_t *init_kernel_single(double (*Hk)(int32_t, int32_t, int32_t, int32_t
 
    int32_t NN = (N + 1) * M * M * (n_up - n_low);
    int32_t curr_size = 0;
-   sparse_mat_t *sp_m = init_sparse_matrix(NN, NN, NN); 
+   sparse_mat_t *sp_m = init_sparse_matrix(NN, NN, NN);
    for (int32_t i = n_low; i < n_up; i++) {
       for (int32_t j = 0; j < M; j++) {
          for (int32_t ip = 0; ip <= N; ip++) {
             for (int32_t jp = j; jp < M; jp++) {
                double temp = Hk(i, j, ip, jp, IW, nf);
-            
+
                if (fabs(temp) > 30 * _ZERO_THR_) {
                   sp_m->data[curr_size] = temp;
                   sp_m->i_r[curr_size] = from_ij_to_a(i, j, M);
                   sp_m->i_c[curr_size] = from_ij_to_a(ip, jp, M);
                   curr_size++;
-                 
                }
             }
          }
@@ -350,14 +371,14 @@ sparse_mat_t *init_kernel_single(double (*Hk)(int32_t, int32_t, int32_t, int32_t
 }
 
 typedef struct {
-   double (*Hk)(int32_t, int32_t, int32_t, int32_t, integration_wrapper_t *, int);
-   int nf;
-   int32_t N, M, n_low, n_up;
-   sparse_mat_t *sp_m;
-   double c_fact;
+      double (*Hk)(int32_t, int32_t, int32_t, int32_t, integration_wrapper_t *, int);
+      int nf;
+      int32_t N, M, n_low, n_up;
+      sparse_mat_t *sp_m;
+      double c_fact;
 
-   sparse_mat_t *global_sp_m;
-   int32_t offset;
+      sparse_mat_t *global_sp_m;
+      int32_t offset;
 } thread_container_t;
 
 void init_kernel_thread_function(void *p)
@@ -377,7 +398,8 @@ static void local_copy_sp_memory(void *p)
    SIGNAL_DONE_TASK();
 }
 
-sparse_mat_t *init_kernel(double (*Hk)(int32_t, int32_t, int32_t, int32_t, integration_wrapper_t *, int), int32_t N, int32_t M, double c_fact, int nf, printout_level_e pl)
+sparse_mat_t *init_kernel(double (*Hk)(int32_t, int32_t, int32_t, int32_t, integration_wrapper_t *, int), int32_t N, int32_t M, double c_fact, int nf,
+                          printout_level_e pl)
 {
    struct timespec start, finish;
    double elapsed;
@@ -435,7 +457,6 @@ sparse_mat_t *init_kernel(double (*Hk)(int32_t, int32_t, int32_t, int32_t, integ
    return sp_m;
 }
 
-
 double Fijk_plus(double ix, double jy, double i, double j, int32_t N)
 {
    (void)N;
@@ -451,7 +472,9 @@ double Fijk_minus(double ix, double jy, double i, double j, int32_t N)
 double Fijk_both(double ix, double jy, double i, double j, int32_t N)
 {
    (void)N;
-   return (max2(1.0 - max3(fabs(ix - i), fabs(jy - j), fabs(-ix - jy + i + j)), 0) + max2(1.0 - max3(fabs(ix - i), fabs(jy - j), fabs(+ix - jy - i + j)), 0)) * 0.5;
+   return (max2(1.0 - max3(fabs(ix - i), fabs(jy - j), fabs(-ix - jy + i + j)), 0) +
+           max2(1.0 - max3(fabs(ix - i), fabs(jy - j), fabs(+ix - jy - i + j)), 0)) *
+          0.5;
 }
 
 void get_grid_in_3D_space_double(double i, double j, int32_t N, int32_t M, double c_fact, double *x1, double *x2, double *x3)
@@ -608,7 +631,6 @@ static void get_grid_in_3D_space(int32_t i, int32_t j, int32_t N, int32_t M, dou
    *x3 = -(*x1) - (*x2);
 }
 
-
 void get_3D_in_grid_space_specific(double x1, double x2, double x3, int32_t N, int32_t M, double c_fact, double *phi, double *rho)
 {
    *rho = max3(fabs(x1), fabs(x2), fabs(x3));
@@ -654,7 +676,10 @@ void get_3D_in_grid_space_COS_angle(double x1, double x2, double x3, int32_t N, 
 void get_3D_in_grid_space_LOG_radial(int32_t M, double c_fact, double *rho) { *rho = log((*rho)) * M / c_fact + M; }
 void get_3D_in_grid_space_PWR_radial(int32_t M, double c_fact, double *rho) { *rho = (pow((*rho), 1.0 / grid_exponent) * (1 + c_fact) - c_fact) * M; }
 void get_3D_in_grid_space_IML_radial(int32_t M, double c_fact, double *rho) { *rho = M * (1.0 + c_fact * log((*rho) / (2.0 - (*rho)))); }
-void get_3D_in_grid_space_HYP_radial(int32_t M, double c_fact, double *rho) { *rho = M * (1.0 + c_fact * acosh(1.0 / pow((*rho), 1.0 / grid_exponent))); }
+void get_3D_in_grid_space_HYP_radial(int32_t M, double c_fact, double *rho)
+{
+   *rho = M * (1.0 + c_fact * acosh(1.0 / pow((*rho), 1.0 / grid_exponent)));
+}
 
 double execution_time(void (*fnc)(void *), void *p)
 {

@@ -2,8 +2,8 @@
 // Author: Simone Rodini <mailto:simone.rodini@desy.de>
 //
 
-#include <TW3EV_include/kernels.h>
-#include <TW3EV_include/kernels_common.h>
+#include <honeycomb/kernels.h>
+#include <honeycomb/kernels_common.h>
 
 static const double Nc = 3.0;
 static const double Ncm1 = 0.33333333333333;

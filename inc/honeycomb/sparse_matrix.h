@@ -8,8 +8,8 @@ extern "C" {
 #ifndef SPARSE_MATRIX_H
 #define SPARSE_MATRIX_H
 
-#include <TW3EV_include/default.h>
-#include <TW3EV_include/thpool.h>
+#include <honeycomb/default.h>
+#include <honeycomb/thpool.h>
 
 typedef struct {
    int32_t i, a, b;

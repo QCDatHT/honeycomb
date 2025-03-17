@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-#include <TW3EV_include/tw3ev.h>
+#include <Honeycomb/tw3ev.h>
 #include <stdbool.h>
 
 #define NTHREAD_LOC 10
@@ -178,30 +178,33 @@ void check_model_symmetries()
    else tw3ev_log(TW3EV_WARNING, "Not ok");
 }
 
+#define CONFIG_LOCATION "../../tests/"
+
 int main(void)
 {
 
    check_model_symmetries();
 
+
    evolution_interface_t *ei = NULL;
    tw3ev_log(TW3EV_WARNING, "Start first test...");
-   ei = exec_given_config("../config_1.in", ei, "result");
+   ei = exec_given_config(CONFIG_LOCATION "config_1.in", ei, "result");
    tw3ev_log(TW3EV_WARNING, "... end first test.");
 
    tw3ev_log(TW3EV_WARNING, "Start second test...");
-   ei = exec_given_config("../config_2.in", ei, "result");
+   ei = exec_given_config(CONFIG_LOCATION "config_2.in", ei, "result");
    tw3ev_log(TW3EV_WARNING, "... end second test.");
 
    tw3ev_log(TW3EV_WARNING, "Start third test...");
-   ei = compute_back_and_forth("../config_3.in", ei);
+   ei = compute_back_and_forth(CONFIG_LOCATION "config_3.in", ei);
    tw3ev_log(TW3EV_WARNING, "... end third test.");
 
    tw3ev_log(TW3EV_WARNING, "Start fourth test...");
-   ei = exec_given_config("../config_4.in", ei, "result");
+   ei = exec_given_config(CONFIG_LOCATION "config_4.in", ei, "result");
    tw3ev_log(TW3EV_WARNING, "... end fourth test.");
 
    tw3ev_log(TW3EV_WARNING, "Start fifth test...");
-   ei = exec_given_config("../config_5.in", ei, "result");
+   ei = exec_given_config(CONFIG_LOCATION "config_5.in", ei, "result");
    tw3ev_log(TW3EV_WARNING, "... end fifth test");
 
    free_evolution_interface(&ei);

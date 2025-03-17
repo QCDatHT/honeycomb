@@ -5,28 +5,27 @@
 extern "C" {
 #endif
 
-#ifndef INTEGRATION_H
-#define INTEGRATION_H
+#ifndef THPOOL_H
+#define THPOOL_H
 
-#include <TW3EV_include/default.h>
+#include <honeycomb/default.h>
 
-typedef enum { RULE_TW3EV_GK21, RULE_TW3EV_GK31, RULE_TW3EV_GK41, RULE_TW3EV_GK61 } tw3ev_integration_rule_e;
+#define MAX_THREADS 64
+#define MAX_QUEUE 65536
 
-typedef void integration_rule(double (*fnc)(double, void *), void *p_fnc, double a, double b, double epsabs, double *result);
-void integration_qag(double (*fnc)(double, void *), void *p_fnc, double a, double b, double epsabs, double *result, tw3ev_integration_rule_e gk_type);
+typedef struct thpool_t thpool_t;
 
-void integration(double (*fnc)(double, void *), void *p_fnc, double a, double b, double epsabs, double *result);
-void set_integration_routine(integration_rule *ir);
+thpool_t *thpool_create(int32_t thread_count, int32_t queue_size);
 
-integration_rule integration_rule_gk21;
-integration_rule integration_rule_gk31;
-integration_rule integration_rule_gk41;
-integration_rule integration_rule_gk61;
+int32_t thpool_add(thpool_t *pool, void (*routine)(void *), void *arg);
+
+int32_t thpool_destroy(thpool_t *pool);
 
 #endif
 #ifdef __cplusplus
 }
 #endif
+
  // Copyright (C) 2024 Simone Rodini; Lorenzo Rossi
  // This program is free software; you can redistribute it and/or modify
  // it under the terms of the GNU General Public License as published by

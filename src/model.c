@@ -2,8 +2,8 @@
 // Author: Simone Rodini <mailto:simone.rodini@desy.de>
 //
 
-#include <TW3EV_include/model.h>
-#include <TW3EV_include/ran2.h>
+#include <honeycomb/model.h>
+#include <honeycomb/ran2.h>
 
 double model_zero_function(double x1, double x2, double x3, void *p) {
    (void)x1;

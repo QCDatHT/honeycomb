@@ -2,7 +2,7 @@
 // Author: Simone Rodini <mailto:simone.rodini@desy.de>
 //
 
-#include <TW3EV_include/integration.h>
+#include <honeycomb/integration.h>
 
 static inline bool subinterval_too_small(double a1, double a2, double b2)
 {

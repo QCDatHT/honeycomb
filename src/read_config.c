@@ -2,7 +2,7 @@
 // Author: Simone Rodini <mailto:simone.rodini@desy.de>
 //
 
-#include <TW3EV_include/read_config.h>
+#include <honeycomb/read_config.h>
 
 #define CHECK_NOT_NUM(tk, i) ((tk)[i] < '0' || (tk)[i] > '9')
 

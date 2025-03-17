@@ -2,7 +2,7 @@
 // Author: Simone Rodini <mailto:simone.rodini@desy.de>
 //
 
-#include <TW3EV_include/thpool.h>
+#include <honeycomb/thpool.h>
 
 #define POOL_LOCK(pool) (pthread_mutex_lock(&((pool)->lock)))
 #define POOL_UNLOCK(pool) (pthread_mutex_unlock(&((pool)->lock)))

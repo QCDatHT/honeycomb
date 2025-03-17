@@ -9,14 +9,14 @@ extern "C" {
 #define EVOLUTION_INTERFACE_H
 
 
-#include <TW3EV_include/default.h>
-#include <TW3EV_include/diff_eq.h>
-#include <TW3EV_include/integration.h>
-#include <TW3EV_include/kernels.h>
-#include <TW3EV_include/model.h>
-#include <TW3EV_include/sparse_matrix.h>
-#include <TW3EV_include/thpool.h>
-#include <TW3EV_include/read_config.h>
+#include <honeycomb/default.h>
+#include <honeycomb/diff_eq.h>
+#include <honeycomb/integration.h>
+#include <honeycomb/kernels.h>
+#include <honeycomb/model.h>
+#include <honeycomb/sparse_matrix.h>
+#include <honeycomb/thpool.h>
+#include <honeycomb/read_config.h>
 
 typedef struct evolution_interface_t {
    printout_level_e pr_lev;

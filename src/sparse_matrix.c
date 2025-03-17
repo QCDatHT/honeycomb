@@ -2,8 +2,8 @@
 // Author: Simone Rodini <mailto:simone.rodini@desy.de>
 //
 
-#include <TW3EV_include/sparse_matrix.h>
-#include <TW3EV_include/thpool.h>
+#include <honeycomb/sparse_matrix.h>
+#include <honeycomb/thpool.h>
 
 sparse_mat_t *init_sparse_matrix(int32_t size, int32_t n, int32_t m)
 {

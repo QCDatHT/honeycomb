@@ -5,27 +5,26 @@
 extern "C" {
 #endif
 
-#ifndef THPOOL_H
-#define THPOOL_H
+#ifndef TW3EV_H
+#define TW3EV_H
 
-#include <TW3EV_include/default.h>
-
-#define MAX_THREADS 64
-#define MAX_QUEUE 65536
-
-typedef struct thpool_t thpool_t;
-
-thpool_t *thpool_create(int32_t thread_count, int32_t queue_size);
-
-int32_t thpool_add(thpool_t *pool, void (*routine)(void *), void *arg);
-
-int32_t thpool_destroy(thpool_t *pool);
+#include <honeycomb/default.h>
+#include <honeycomb/read_config.h>
+#include <honeycomb/thpool.h>
+#include <honeycomb/ran2.h>
+#include <honeycomb/sparse_matrix.h>
+#include <honeycomb/integration.h>
+#include <honeycomb/kernels.h>
+#include <honeycomb/kernels_common.h>
+#include <honeycomb/diff_eq.h>
+#include <honeycomb/model.h>
+#include <honeycomb/evolution_interface.h>
 
 #endif
+
 #ifdef __cplusplus
 }
 #endif
-
  // Copyright (C) 2024 Simone Rodini; Lorenzo Rossi
  // This program is free software; you can redistribute it and/or modify
  // it under the terms of the GNU General Public License as published by

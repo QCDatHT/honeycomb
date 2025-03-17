@@ -8,9 +8,9 @@ extern "C" {
 #ifndef DIFF_EQ_H
 #define DIFF_EQ_H
 
-#include <TW3EV_include/default.h>
-#include <TW3EV_include/kernels.h>
-#include <TW3EV_include/sparse_matrix.h>
+#include <honeycomb/default.h>
+#include <honeycomb/kernels.h>
+#include <honeycomb/sparse_matrix.h>
 
 typedef struct {
    // Function pointer to computation of as = \alpha_s/4\pi at a given

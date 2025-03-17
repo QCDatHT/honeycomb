@@ -8,10 +8,10 @@ extern "C" {
 #ifndef KERNELS_H
 #define KERNELS_H
 
-#include <TW3EV_include/default.h>
-#include <TW3EV_include/integration.h>
-#include <TW3EV_include/sparse_matrix.h>
-#include <TW3EV_include/thpool.h>
+#include <honeycomb/default.h>
+#include <honeycomb/integration.h>
+#include <honeycomb/sparse_matrix.h>
+#include <honeycomb/thpool.h>
 
 typedef enum { IT_PLUS = 0, IT_MINUS = 1, IT_BOTH = 2 } interpolant_type_e;
 

@@ -5,23 +5,25 @@
 extern "C" {
 #endif
 
-#ifndef TW3EV_H
-#define TW3EV_H
+#ifndef INTEGRATION_H
+#define INTEGRATION_H
 
-#include <TW3EV_include/default.h>
-#include <TW3EV_include/read_config.h>
-#include <TW3EV_include/thpool.h>
-#include <TW3EV_include/ran2.h>
-#include <TW3EV_include/sparse_matrix.h>
-#include <TW3EV_include/integration.h>
-#include <TW3EV_include/kernels.h>
-#include <TW3EV_include/kernels_common.h>
-#include <TW3EV_include/diff_eq.h>
-#include <TW3EV_include/model.h>
-#include <TW3EV_include/evolution_interface.h>
+#include <honeycomb/default.h>
+
+typedef enum { RULE_TW3EV_GK21, RULE_TW3EV_GK31, RULE_TW3EV_GK41, RULE_TW3EV_GK61 } tw3ev_integration_rule_e;
+
+typedef void integration_rule(double (*fnc)(double, void *), void *p_fnc, double a, double b, double epsabs, double *result);
+void integration_qag(double (*fnc)(double, void *), void *p_fnc, double a, double b, double epsabs, double *result, tw3ev_integration_rule_e gk_type);
+
+void integration(double (*fnc)(double, void *), void *p_fnc, double a, double b, double epsabs, double *result);
+void set_integration_routine(integration_rule *ir);
+
+integration_rule integration_rule_gk21;
+integration_rule integration_rule_gk31;
+integration_rule integration_rule_gk41;
+integration_rule integration_rule_gk61;
 
 #endif
-
 #ifdef __cplusplus
 }
 #endif

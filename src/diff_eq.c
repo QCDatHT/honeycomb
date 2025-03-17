@@ -2,7 +2,7 @@
 // Author: Simone Rodini <mailto:simone.rodini@desy.de>
 //
 
-#include <TW3EV_include/diff_eq.h>
+#include <honeycomb/diff_eq.h>
 
 void rescale_nf_kernels(rk4th_internal_t *rk, double curr_nf, double new_nf)
 {

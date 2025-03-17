@@ -2,8 +2,8 @@
 // Author: Simone Rodini <mailto:simone.rodini@desy.de>
 //
 
-#include <TW3EV_include/kernels.h>
-#include <TW3EV_include/kernels_common.h>
+#include <honeycomb/kernels.h>
+#include <honeycomb/kernels_common.h>
 #ifndef M_PI
 #define M_PI 3.141592653589793
 #endif

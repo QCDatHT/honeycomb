@@ -8,7 +8,7 @@ extern "C" {
 #ifndef MODEL_H
 #define MODEL_H
 
-#include <TW3EV_include/default.h>
+#include <honeycomb/default.h>
 
 double model_zero_function(double x1, double x2, double x3, void *p);
 

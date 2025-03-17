@@ -8,7 +8,7 @@ extern "C" {
 #ifndef KERNELS_COMMON_H
 #define KERNELS_COMMON_H
 
-#include <TW3EV_include/kernels.h>
+#include <honeycomb/kernels.h>
 
 // Some forward declarations
 double Fij(double x1, double x2, double x3, int32_t i, int32_t j, int32_t N, int32_t M, double c_fact);

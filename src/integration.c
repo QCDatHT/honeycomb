@@ -2,7 +2,7 @@
 // Author: Simone Rodini <mailto:simone.rodini@desy.de>
 //
 
-#include <TW3EV_include/integration.h>
+#include <honeycomb/integration.h>
 // (double (*fnc)(double, void *), void *p_fnc, double a, double b, double epsabs, double *result)
 
 static integration_rule *local_integration_rule = NULL;

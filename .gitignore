@@ -4,3 +4,5 @@
 /dat/results/
 .clang-format
 /build/
+/.cache/
+compile_commands.json

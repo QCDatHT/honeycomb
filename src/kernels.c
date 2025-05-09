@@ -477,6 +477,74 @@ double Fijk_both(double ix, double jy, double i, double j, int32_t N)
           0.5;
 }
 
+double Df_Fijk_plus(double f, double r, double i, double j, int32_t N)
+{
+   (void)N;
+   const double k = -i - j;
+   const double q = -f - r;
+   if (f >= i && r > j - 1 && q >= k)return 0;
+   if (f < i && r <= j && q < k + 1) return +1;
+   if (f > i - 1 && r > j && q >= k) return +1;
+   if (f <= i && r < j + 1 && q < k) return 0;
+   if (f > i && r >= j && q > k - 1) return -1;
+   if (f < i + 1 && r < j && q <= k) return -1;
+   return 0;
+}
+
+double Dr_Fijk_plus(double f, double r, double i, double j, int32_t N)
+{
+   (void)N;
+   const double k = -i - j;
+   const double q = -f - r;
+   if (f >= i && r > j - 1 && q >= k)return +1;
+   if (f < i && r <= j && q < k + 1) return +1;
+   if (f > i - 1 && r > j && q >= k) return 0;
+   if (f <= i && r < j + 1 && q < k) return -1;
+   if (f > i && r >= j && q > k - 1) return -1;
+   if (f < i + 1 && r < j && q <= k) return 0;
+   return 0;
+}
+
+double Df_Fijk_minus(double f, double r, double i, double j, int32_t N)
+{
+   (void)N;
+   const double k = +i - j;
+   const double q = +f - r;
+   if (f >= i && r < j && q < k + 1) return -1;
+   if (f < i && r > j - 1 && q >= k) return 0;
+   if (f > i - 1 && r <= j && q < k) return +1;
+   if (f <= i && r > j && q > k - 1) return +1;
+   if (f > i && r < j + 1 && q <= k) return 0;
+   if (f < i + 1 && r >= j && q > k) return -1;
+   return 0;
+}
+
+double Dr_Fijk_minus(double f, double r, double i, double j, int32_t N)
+{
+   (void)N;
+   const double k = +i - j;
+   const double q = +f - r;
+   if (f >= i && r < j && q < k + 1) return +1;
+   if (f < i && r > j - 1 && q >= k) return +1;
+   if (f > i - 1 && r <= j && q < k) return 0;
+   if (f <= i && r > j && q > k - 1) return -1;
+   if (f > i && r < j + 1 && q <= k) return -1;
+   if (f < i + 1 && r >= j && q > k) return 0;
+   return 0;
+}
+
+double Df_Fijk_both(double f, double r, double i, double j, int32_t N)
+{
+   //
+   return 0.5 * (Df_Fijk_plus(f, r, i, j, N) + Df_Fijk_minus(f, r, i, j, N));
+}
+
+double Dr_Fijk_both(double f, double r, double i, double j, int32_t N)
+{
+   //
+   return 0.5 * (Dr_Fijk_plus(f, r, i, j, N) + Dr_Fijk_minus(f, r, i, j, N));
+}
+
 void get_grid_in_3D_space_double(double i, double j, int32_t N, int32_t M, double c_fact, double *x1, double *x2, double *x3)
 {
    if (i >= N + 1 || i < 0) i -= sign(i) * (N + 1);

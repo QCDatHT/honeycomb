@@ -17,31 +17,33 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 add_compile_options(-Wall -Wextra -Werror -fPIC -O3)
 add_compile_options(
-  -march=native 
-  -fno-math-errno 
-  -fno-trapping-math 
-  -fno-rounding-math 
-  -fexcess-precision=fast 
-  -fcx-limited-range 
-  -fomit-frame-pointer 
-  -funroll-loops
-  -fopenmp -DUSE_OMP)
+   -march=native
+   -fno-math-errno
+   -fno-trapping-math
+   -fno-rounding-math
+   -fexcess-precision=fast
+   -fcx-limited-range
+   -fomit-frame-pointer
+   -funroll-loops
+)
+
+# -fopenmp -DUSE_OMP
 
 # Check the processor architecture
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|i[3-6]86|amd64")
-  # x86-specific compiler flags
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpmath=sse -msse2")
+   # x86-specific compiler flags
+   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpmath=sse -msse2")
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
-  # ARM-specific compiler flags
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcpu=native -mtune=native")
+   # ARM-specific compiler flags
+   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mcpu=native -mtune=native")
 endif()
 
 if(NOT DEFINED CMAKE_MACOSX_RPATH)
-  set(CMAKE_MACOSX_RPATH 0)
+   set(CMAKE_MACOSX_RPATH 0)
 endif()
 
 if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.27.0")
-  cmake_policy(SET CMP0148 OLD)
+   cmake_policy(SET CMP0148 OLD)
 endif()
 
 # ============================
@@ -60,7 +62,6 @@ add_library(Honeycomb SHARED ${source_files})
 
 # Define libraries to be linked
 target_link_libraries(Honeycomb)
-
 
 # ============================
 # Enable testing and build test codes
@@ -88,5 +89,5 @@ configure_file("${PROJECT_SOURCE_DIR}/bin/Honeycomb-config.in" "${PROJECT_BINARY
 
 # Installation of code
 install(TARGETS Honeycomb RUNTIME DESTINATION bin LIBRARY DESTINATION lib)
-install(DIRECTORY inc/Honeycomb DESTINATION include)
+install(DIRECTORY inc/honeycomb DESTINATION include)
 install(FILES ${PROJECT_BINARY_DIR}/bin/Honeycomb-config DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)

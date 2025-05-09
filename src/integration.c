@@ -3,9 +3,9 @@
 //
 
 #include <honeycomb/integration.h>
-// (double (*fnc)(double, void *), void *p_fnc, double a, double b, double epsabs, double *result)
 
-static integration_rule *local_integration_rule = NULL;
+// NOTE: default to GK21 if nothing is specified
+static integration_rule *local_integration_rule = integration_rule_gk61;
 
 void set_integration_routine(integration_rule *ir) { local_integration_rule = ir; }
 

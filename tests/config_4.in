@@ -1,7 +1,7 @@
-n	10
-M  15
+n	20
+M  25
 mu0_2 1
-muF_2	100
+muF_2	10000
 nstep	500
 n_thread	20
 charm_THR	1.6129
@@ -12,9 +12,9 @@ radial_grid_type	HYP_GRID
 angular_grid_type	LIN_GRID
 grid_exponent	3.0
 chiral_even_evolution  true
-chiral_odd_evolution	false
+chiral_odd_evolution	true
 basefolder	../..
-kernel_subfolder shipped_60x15
-result_subfolder full_kernels_1_to_100
+kernel_subfolder shipped_120x25
+result_subfolder full_kernels_1_to_10000
 integration_rule GK21
 model configC

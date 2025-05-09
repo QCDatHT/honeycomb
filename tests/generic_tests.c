@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-#include <Honeycomb/tw3ev.h>
+#include <honeycomb/honeycomb.h>
 #include <stdbool.h>
 
 #define NTHREAD_LOC 10
@@ -91,6 +91,9 @@ evolution_functions_t init_model_from_config(input_parameters_t *in_par)
       ev.DTd = DTd_test;
       ev.Ts = Ts_test;
       ev.DTs = DTs_test;
+   } else if (strcmp(in_par->model, "configD") == 0) {
+      ev.TFp = TFp_test;
+      ev.TFm = TFm_test;
    } else tw3ev_log(TW3EV_ERROR, "Undefined model for constructing evolution functions!");
 
    return ev;
@@ -104,9 +107,13 @@ evolution_interface_t *exec_given_config(const char *conf_name, evolution_interf
    ev.p_PDF = &x;
 
    ei = init_evolution_interface(as, NULL, &ev, in_par, PL_ESSENTIAL, ei, false);
+   saved_solution_t *solIn = init_saved_solution(ei);
+   save_model(solIn, "initial", BASIS_EVOLUTION);
+   save_model(solIn, "initial", BASIS_BOTH);
 
    saved_solution_t *solOut = execute_evolution(ei);
 
+   save_model(solOut, specname, BASIS_EVOLUTION);
    save_model(solOut, specname, BASIS_BOTH);
 
    free_saved_solution(&solOut);
@@ -180,32 +187,73 @@ void check_model_symmetries()
 
 #define CONFIG_LOCATION "../../tests/"
 
-int main(void)
+int main(int argc, char **argv)
+{
+   (void)argc;
+   check_model_symmetries();
+
+   evolution_interface_t *ei = NULL;
+   // tw3ev_log(TW3EV_WARNING, "Start first test...");
+   // ei = exec_given_config(CONFIG_LOCATION "config_1.in", ei, "result");
+   // tw3ev_log(TW3EV_WARNING, "... end first test.");
+
+   // tw3ev_log(TW3EV_WARNING, "Start second test...");
+   // ei = exec_given_config(CONFIG_LOCATION "config_2.in", ei, "result");
+   // tw3ev_log(TW3EV_WARNING, "... end second test.");
+
+   // tw3ev_log(TW3EV_WARNING, "Start third test...");
+   // ei = compute_back_and_forth(CONFIG_LOCATION "config_3.in", ei);
+   // tw3ev_log(TW3EV_WARNING, "... end third test.");
+
+   char buffer[1024];
+   strcpy(buffer, CONFIG_LOCATION);
+   strcat(buffer, argv[1]);
+
+   tw3ev_log(TW3EV_WARNING, "Start %s test...", argv[1]);
+   ei = exec_given_config(buffer, ei, "result");
+   tw3ev_log(TW3EV_WARNING, "... end fourth test.");
+
+   // tw3ev_log(TW3EV_WARNING, "Start fifth test...");
+   // ei = exec_given_config(CONFIG_LOCATION "config_5.in", ei, "result");
+   // tw3ev_log(TW3EV_WARNING, "... end fifth test");
+
+   // tw3ev_log(TW3EV_WARNING, "Start sixth test...");
+   // ei = exec_given_config(CONFIG_LOCATION "config_H2.in", ei, "result");
+   // tw3ev_log(TW3EV_WARNING, "... end sixth test.");
+
+   free_evolution_interface(&ei);
+   return 0;
+}
+
+int main_old(void)
 {
 
    check_model_symmetries();
 
-
    evolution_interface_t *ei = NULL;
-   tw3ev_log(TW3EV_WARNING, "Start first test...");
-   ei = exec_given_config(CONFIG_LOCATION "config_1.in", ei, "result");
-   tw3ev_log(TW3EV_WARNING, "... end first test.");
+   // tw3ev_log(TW3EV_WARNING, "Start first test...");
+   // ei = exec_given_config(CONFIG_LOCATION "config_1.in", ei, "result");
+   // tw3ev_log(TW3EV_WARNING, "... end first test.");
 
-   tw3ev_log(TW3EV_WARNING, "Start second test...");
-   ei = exec_given_config(CONFIG_LOCATION "config_2.in", ei, "result");
-   tw3ev_log(TW3EV_WARNING, "... end second test.");
+   // tw3ev_log(TW3EV_WARNING, "Start second test...");
+   // ei = exec_given_config(CONFIG_LOCATION "config_2.in", ei, "result");
+   // tw3ev_log(TW3EV_WARNING, "... end second test.");
 
-   tw3ev_log(TW3EV_WARNING, "Start third test...");
-   ei = compute_back_and_forth(CONFIG_LOCATION "config_3.in", ei);
-   tw3ev_log(TW3EV_WARNING, "... end third test.");
+   // tw3ev_log(TW3EV_WARNING, "Start third test...");
+   // ei = compute_back_and_forth(CONFIG_LOCATION "config_3.in", ei);
+   // tw3ev_log(TW3EV_WARNING, "... end third test.");
 
    tw3ev_log(TW3EV_WARNING, "Start fourth test...");
    ei = exec_given_config(CONFIG_LOCATION "config_4.in", ei, "result");
    tw3ev_log(TW3EV_WARNING, "... end fourth test.");
 
-   tw3ev_log(TW3EV_WARNING, "Start fifth test...");
-   ei = exec_given_config(CONFIG_LOCATION "config_5.in", ei, "result");
-   tw3ev_log(TW3EV_WARNING, "... end fifth test");
+   // tw3ev_log(TW3EV_WARNING, "Start fifth test...");
+   // ei = exec_given_config(CONFIG_LOCATION "config_5.in", ei, "result");
+   // tw3ev_log(TW3EV_WARNING, "... end fifth test");
+
+   tw3ev_log(TW3EV_WARNING, "Start sixth test...");
+   ei = exec_given_config(CONFIG_LOCATION "config_H2.in", ei, "result");
+   tw3ev_log(TW3EV_WARNING, "... end sixth test.");
 
    free_evolution_interface(&ei);
    return 0;

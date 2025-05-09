@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-#include <Honeycomb/tw3ev.h>
+#include <honeycomb/honeycomb.h>
 #include <stdbool.h>
 
 #define NTHREAD_LOC 10

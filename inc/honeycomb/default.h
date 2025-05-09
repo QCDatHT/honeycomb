@@ -31,7 +31,7 @@ extern "C" {
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifdef USE_OMP
-#include <omp.h>
+// #include <omp.h>
 #endif
 
 #define WSL_SIZE 500
@@ -132,7 +132,6 @@ char *clear_string(char *s);
 void tw3ev_log(tw3ev_log_level_e level, char *msg, ...);
 void set_local_error_handling(void (*f)());
 
-
 void tw3ev_quicksort(int32_t *arr, int32_t low, int32_t high);
 
 inline double sign(const double x) { return (0.0 < x) - (x < 0.0); }
@@ -147,18 +146,17 @@ void *free_ptr(void *p);
 }
 #endif
 
- // Copyright (C) 2024 Simone Rodini; Lorenzo Rossi
- // This program is free software; you can redistribute it and/or modify
- // it under the terms of the GNU General Public License as published by
- // the Free Software Foundation; either version 2 of the License, or
- // (at your option) any later version.
- // 
- // This program is distributed in the hope that it will be useful,
- // but WITHOUT ANY WARRANTY; without even the implied warranty of
- // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- // GNU General Public License for more details.
- // 
- // You should have received a copy of the GNU General Public License along
- // with this program; if not, write to the Free Software Foundation, Inc.,
- // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
+// Copyright (C) 2024 Simone Rodini; Lorenzo Rossi
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.

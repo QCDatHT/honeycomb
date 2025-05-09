@@ -18,7 +18,9 @@ void gauss_kronrod_61(double (*fnc)(double, void *), void *p_fnc, double a, doub
 
 typedef void gauss_kronrod_rule(double (*fnc)(double, void *), void *p_fnc, double a, double b, double *result, double *abserr);
 
-double qag_all_recursive_step(double (*fnc)(double, void *), void *p_fnc, double a, double b, double epsabs, gauss_kronrod_rule *integration)
+#define MAX_DEPTH 20
+
+double qag_all_recursive_step(double (*fnc)(double, void *), void *p_fnc, double a, double b, double epsabs, gauss_kronrod_rule *integration, size_t depth)
 {
    double res = 0, err = 0;
    integration(fnc, p_fnc, a, b, &res, &err);
@@ -26,10 +28,10 @@ double qag_all_recursive_step(double (*fnc)(double, void *), void *p_fnc, double
    // check here also for zero integral! (Equivalent to just checking on the outside)
    // no depth check required, it is enough to check for the size of the interval
    // if (err <= epsabs || subinterval_too_small(a, center, b) || fabs(res) < _ZERO_THR_) return res;
-   if (err <= epsabs || subinterval_too_small(a, center, b) ) return res;
+   if (err <= epsabs || subinterval_too_small(a, center, b) || depth >= MAX_DEPTH) return res;
 
-   double res1 = qag_all_recursive_step(fnc, p_fnc, a, center, epsabs, integration);
-   double res2 = qag_all_recursive_step(fnc, p_fnc, center, b, epsabs, integration);
+   double res1 = qag_all_recursive_step(fnc, p_fnc, a, center, epsabs, integration, depth + 1);
+   double res2 = qag_all_recursive_step(fnc, p_fnc, center, b, epsabs, integration, depth + 1);
    return res1 + res2;
 }
 
@@ -62,28 +64,27 @@ void integration_qag(double (*fnc)(double, void *), void *p_fnc, double a, doubl
    // }
    epsabs = 1e-10;
 
-   double temp = 0;
-   const double width = (b - a);
-   const size_t steps = 10;
-// #pragma omp parallel for reduction(+ : temp)
-   for (size_t il = 0; il < steps; il++)
-      temp += qag_all_recursive_step(fnc, p_fnc, a + il * width / (double)steps, a + (il + 1) * width / (double)steps, epsabs, integration);
+   double temp = qag_all_recursive_step(fnc, p_fnc, a, b, epsabs, integration, 0);
+   // const double width = (b - a);
+   // const size_t steps = 10;
+   // #pragma omp parallel for reduction(+ : temp)
+   // for (size_t il = 0; il < steps; il++)
+   //    temp += qag_all_recursive_step(fnc, p_fnc, a + il * width / (double)steps, a + (il + 1) * width / (double)steps, epsabs, integration);
    // *result = qag_all_recursive_step(fnc, p_fnc, a, (a + b) * 0.5, epsabs, integration) + qag_all_recursive_step(fnc, p_fnc, (a + b) * 0.5, b, epsabs, integration);
    *result = temp;
 }
 
- // Copyright (C) 2024 Simone Rodini; Lorenzo Rossi
- // This program is free software; you can redistribute it and/or modify
- // it under the terms of the GNU General Public License as published by
- // the Free Software Foundation; either version 2 of the License, or
- // (at your option) any later version.
- // 
- // This program is distributed in the hope that it will be useful,
- // but WITHOUT ANY WARRANTY; without even the implied warranty of
- // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- // GNU General Public License for more details.
- // 
- // You should have received a copy of the GNU General Public License along
- // with this program; if not, write to the Free Software Foundation, Inc.,
- // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
+// Copyright (C) 2024 Simone Rodini; Lorenzo Rossi
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
